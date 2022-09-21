@@ -1,4 +1,6 @@
 from PyQt5 import QtChart as qtch
+from PyQt5 import QtWidgets as qtw
+from PyQt5 import QtCore as qtc
 
 class SensorChart(qtch.QChartView):
     MAX_LEN = 100

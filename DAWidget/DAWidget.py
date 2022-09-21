@@ -1,7 +1,6 @@
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 from DAWidget.SerialConnectionWidget import SerialConnectionWidget
-from DAWidget.chartWidget import SensorChart
 from arduino.ArduinoSensor import ArduinoSensor
 
 class DAWidget(qtw.QWidget):
@@ -21,10 +20,8 @@ class DAWidget(qtw.QWidget):
 
 
         #Graficas
-        self.charts = SensorChart('Gyro')
 
         main_layout.addItem(left_layout)
-        main_layout.addWidget(self.charts)
         self.setLayout(main_layout)
 
         self.timer = qtc.QTimer()
@@ -39,4 +36,4 @@ class DAWidget(qtw.QWidget):
 
     def timer_event(self):
         data = self.sensor.value
-        self.charts.add_data(data[0])
+        print(data)
