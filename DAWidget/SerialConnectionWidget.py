@@ -54,7 +54,10 @@ class SerialConnectionWidget(qtw.QWidget):
         self._serial.port = name
 
     def setSerialEvent(self, on_connect, on_disconnect):
-        self.connect_button.clicked.connect(self.serial_event(on_connect, on_disconnect))
+        try:
+            self.connect_button.clicked.disconnect()
+            self.connect_button.clicked.connect(self.serial_event(on_connect, on_disconnect))
+        except: pass
 
     def serial_event(self, on_connect = None, on_disconnect = None):
         def handle_serial():

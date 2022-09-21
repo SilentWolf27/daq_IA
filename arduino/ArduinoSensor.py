@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from distutils.cmd import Command
 from arduino.ArduinoSerial import ArduinoSerial
 from typing import List
-
+import numpy as np
 class ArduinoSensor(ABC):
     def __init__(self, command: str, serial: ArduinoSerial) -> None:
         self._command = command
@@ -22,6 +22,6 @@ class ArduinoSensor(ABC):
             self._serial.writeLine(self._command)
             data = self._serial.readLine().split(' ')
 
-            return data
+            return np.array(data, dtype=np.float16) 
         except:
             print('Ocurrio un error, revisa la conexión.')

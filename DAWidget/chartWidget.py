@@ -26,6 +26,7 @@ class SensorChart(qtch.QChartView):
         chart.setAxisY(y_axis, self.series)
 
     def add_data(self, data: float | int):
+        print(data)
         self.series.append(self.count, data)
         self.update_y_axis(data)
         
