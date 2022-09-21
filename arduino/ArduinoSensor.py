@@ -4,8 +4,9 @@ from arduino.ArduinoSerial import ArduinoSerial
 from typing import List
 
 class ArduinoSensor(ABC):
-    def __init__(self, command: str) -> None:
+    def __init__(self, command: str, serial: ArduinoSerial) -> None:
         self._command = command
+        self._serial = serial
     
     @property
     def command(self) -> str:
@@ -15,14 +16,11 @@ class ArduinoSensor(ABC):
     def command(self, value: str) -> None:
         if(value):
             self._command = value
-
-    def getValue(self, port: ArduinoSerial) -> List[float]:
-        try:
-            if not port.is_open:
-                port.open()
-            
-            port.writeLine(self._command)
-            data = port.readLine().split(' ')
+    @property
+    def value(self) -> List[float]:
+        try:            
+            self._serial.writeLine(self._command)
+            data = self._serial.readLine().split(' ')
 
             return data
         except:

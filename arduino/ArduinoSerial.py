@@ -7,7 +7,11 @@ class ArduinoSerial():
         self._serial: Serial = Serial(port=port, baudrate=baudrate, timeout=timeout)
 
     @property
-    def port(self) -> Serial:
+    def serial(self) -> Serial:
+        return self._serial
+
+    @property
+    def port(self) -> str:
         return self._serial.port
 
     @port.setter
