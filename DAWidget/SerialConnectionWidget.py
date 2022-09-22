@@ -74,7 +74,6 @@ class SerialConnectionWidget(qtw.QWidget):
                 if self._serial.test_connection():
                     self.connected = True
                     self.connect_button.setText('Desconectar')
-                    self.connect_button.clicked.connect(self._disconnect)
                     self.port_combo.setEnabled(False)
                     
                     if callback:
