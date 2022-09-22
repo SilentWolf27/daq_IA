@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
+from DAWidget.DataFileWidget import DataFileWidget
 from DAWidget.SerialConnectionWidget import SerialConnectionWidget
 from arduino.ArduinoSensor import ArduinoSensor
 from DAWidget.ChartTabs import SensorChartTabs
@@ -9,7 +10,7 @@ from models.SensorModel import SensorModel
 class DAWidget(qtw.QWidget):
     def __init__(self) -> None:
         super().__init__()
-
+    
         main_layout = qtw.QHBoxLayout()
         left_layout = qtw.QVBoxLayout()  # Layour barra lateral
 
@@ -18,7 +19,9 @@ class DAWidget(qtw.QWidget):
         self.serial_connect.setSerialEvent(
             on_connect=self.start_timer, on_disconnect=self.stop_timer)
 
+        self.data_connect = DataFileWidget()
         left_layout.addWidget(self.serial_connect)
+        left_layout.addWidget(self.data_connect)
         # Sensores que se adquiriran los datos
         self.sensor = ArduinoSensor('G', self.serial_connect.serial)
 

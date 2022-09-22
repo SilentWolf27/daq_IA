@@ -7,8 +7,8 @@ class MainWidget(qtw.QMainWindow):
 
     def __init__(self) -> None:
         super().__init__()
-        # self.init_window()
         self.setCentralWidget(DAWidget())
+        self.setWindowTitle('Herramienta DAQ')
         self.show()
 
 

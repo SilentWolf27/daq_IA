@@ -1,0 +1,2 @@
+class DAQModel():
+    pass
