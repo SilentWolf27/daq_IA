@@ -10,7 +10,7 @@ from models.SensorModel import SensorModel
 class DAWidget(qtw.QWidget):
     def __init__(self) -> None:
         super().__init__()
-    
+
         main_layout = qtw.QHBoxLayout()
         left_layout = qtw.QVBoxLayout()  # Layour barra lateral
 
@@ -39,6 +39,7 @@ class DAWidget(qtw.QWidget):
     def start_timer(self):
         self.timer.setInterval(250)
         self.timer.start()
+        self.data_connect.enable()
 
     def stop_timer(self):
         self.timer.stop()
@@ -46,3 +47,4 @@ class DAWidget(qtw.QWidget):
     def timer_event(self):
         data = self.sensor.value
         self.tab.add_data(data)
+        self.data_connect.add_data(data)

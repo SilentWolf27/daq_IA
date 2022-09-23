@@ -1,10 +1,13 @@
 from PyQt5 import QtWidgets as qtw
 
+from models.DAQModel import DAQModel
+
 
 class DataFileWidget(qtw.QWidget):
     def __init__(self) -> None:
         super().__init__()
-        self.saving: bool = False
+        self._saving: bool = False
+        self.daq = DAQModel()
 
         data_layout = qtw.QVBoxLayout()
 
@@ -17,12 +20,14 @@ class DataFileWidget(qtw.QWidget):
         # Boton iniciar o detener la adquisicion
         self.start_button = qtw.QPushButton('Iniciar', self)
         self.start_button.setMinimumSize(100, 25)
+        self.start_button.setEnabled(False)
         self.start_button.clicked.connect(self.data_event())
         data_layout.addWidget(self.start_button)
 
         # Boton borrar los datos
         self.clear_button = qtw.QPushButton('Borrar datos', self)
         self.clear_button.setMinimumSize(100, 25)
+        self.clear_button.setEnabled(False)
         self.clear_button.clicked.connect(self.clear_data)
         data_layout.addWidget(self.clear_button)
 
@@ -37,6 +42,10 @@ class DataFileWidget(qtw.QWidget):
         main.addWidget(data_groupbox)
         self.setLayout(main)
 
+    @property
+    def saving(self):
+        return self._saving
+
     def setDataEvent(self, data_start, data_stop):
         try:
             self.connect_button.clicked.disconnect()
@@ -47,7 +56,7 @@ class DataFileWidget(qtw.QWidget):
 
     def data_event(self, data_start=None, data_stop=None):
         def handle_data():
-            if self.saving:
+            if self._saving:
                 self._stop(data_stop)
             else:
                 self._start(data_start)
@@ -56,7 +65,7 @@ class DataFileWidget(qtw.QWidget):
 
     def _start(self, callback=None):
         if self.label_input.text() != '':
-            self.saving = True
+            self._saving = True
             self.start_button.setText('Detener')
             self.clear_button.setEnabled(False)
             self.label_input.setStyleSheet("border: 1px solid black")
@@ -67,11 +76,18 @@ class DataFileWidget(qtw.QWidget):
             self.label_input.setStyleSheet("border: 2px solid red")
 
     def _stop(self, callback=None):
-        self.saving = False
+        self._saving = False
         self.start_button.setText('Iniciar')
         self.clear_button.setEnabled(True)
         if callback:
             callback()
 
+    def add_data(self, data):
+        if self._saving:
+            self.daq.append(data, self.label_input.text())
+
     def clear_data(self):
-        pass
+        self.daq.clear()
+
+    def enable(self):
+        self.start_button.setEnabled(True)
