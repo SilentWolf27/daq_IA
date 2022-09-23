@@ -23,13 +23,13 @@ void loop() {
 }
 
 void printMPU6050Data(){
-  Vector rawGyro = mpu.readRawGyro();
+  //Vector rawGyro = mpu.readRawGyro();
   Vector rawAccel = mpu.readRawAccel();
    
   Serial.println(
-    String(rawGyro.XAxis) + " " + 
-    String(rawGyro.YAxis) + " " + 
-    String(rawGyro.ZAxis) + " " + 
+    //String(rawGyro.XAxis) + " " + 
+    //String(rawGyro.YAxis) + " " + 
+    //String(rawGyro.ZAxis) + " " + 
     String(rawAccel.XAxis) + " " +
     String(rawAccel.YAxis) + " " +
     String(rawAccel.ZAxis)  
