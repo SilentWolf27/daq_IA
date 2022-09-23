@@ -22,12 +22,13 @@ class DAWidget(qtw.QWidget):
         self.data_connect = DataFileWidget()
         left_layout.addWidget(self.serial_connect)
         left_layout.addWidget(self.data_connect)
-        # Sensores que se adquiriran los datos
-        self.sensor = ArduinoSensor('G', self.serial_connect.serial)
 
         # Graficas
         sensor_model = SensorModel()
         self.tab = SensorChartTabs(sensor_model.sensors)
+
+        # Sensores que se adquiriran los datos
+        self.sensor = ArduinoSensor(sensor_model.command, self.serial_connect.serial)
 
         main_layout.addItem(left_layout)
         main_layout.addWidget(self.tab)

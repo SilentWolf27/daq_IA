@@ -6,7 +6,6 @@ from models.DAQModel import DAQModel
 class DataFileWidget(qtw.QWidget):
     def __init__(self) -> None:
         super().__init__()
-        self._saving: bool = False
         self.daq = DAQModel()
 
         data_layout = qtw.QVBoxLayout()
@@ -42,10 +41,6 @@ class DataFileWidget(qtw.QWidget):
         main.addWidget(data_groupbox)
         self.setLayout(main)
 
-    @property
-    def saving(self):
-        return self._saving
-
     def setDataEvent(self, data_start, data_stop):
         try:
             self.connect_button.clicked.disconnect()
@@ -56,7 +51,7 @@ class DataFileWidget(qtw.QWidget):
 
     def data_event(self, data_start=None, data_stop=None):
         def handle_data():
-            if self._saving:
+            if self.daq.saving:
                 self._stop(data_stop)
             else:
                 self._start(data_start)
@@ -65,7 +60,7 @@ class DataFileWidget(qtw.QWidget):
 
     def _start(self, callback=None):
         if self.label_input.text() != '':
-            self._saving = True
+            self.daq.saving = True
             self.start_button.setText('Detener')
             self.clear_button.setEnabled(False)
             self.label_input.setStyleSheet("border: 1px solid black")
@@ -76,14 +71,14 @@ class DataFileWidget(qtw.QWidget):
             self.label_input.setStyleSheet("border: 2px solid red")
 
     def _stop(self, callback=None):
-        self._saving = False
+        self.daq.saving = False
         self.start_button.setText('Iniciar')
         self.clear_button.setEnabled(True)
         if callback:
             callback()
 
     def add_data(self, data):
-        if self._saving:
+        if self.daq.saving:
             self.daq.append(data, self.label_input.text())
 
     def clear_data(self):
