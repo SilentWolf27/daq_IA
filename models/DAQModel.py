@@ -2,16 +2,16 @@ from typing import Any
 from models.SensorModel import SensorModel
 from utils.SingletonType import SingletonType
 import numpy as np
+import pandas as pd
 
 class DAQModel(metaclass=SingletonType):
     def __init__(self) -> None:
         model = SensorModel()
-        self._data = np.empty((1, model.length), order='C')
-        self._labels = np.array([])
+        self._data = np.empty((0, model.length))
+        self._labels = np.array([], dtype=np.int8)
         self._saving = False
 
     def append(self, data: Any, label):
-            print(data)
             try:
                 label = int(label)
             except ValueError:
@@ -22,12 +22,17 @@ class DAQModel(metaclass=SingletonType):
       
 
     def clear(self):
-        self._data = np.array([])
+        model = SensorModel()
+        self._data = np.empty((1, model.length))
         self._labels = np.array([])
 
     def save(self, filename):
-        print(filename)
+        sensor_model = SensorModel()
+        output = pd.DataFrame(self._data, columns=sensor_model.sensors)
+        output['Output'] = self._labels
         
+        output.to_csv(filename)
+
     @property
     def data(self):
         return self._data
