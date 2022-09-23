@@ -38,7 +38,7 @@ class DAWidget(qtw.QWidget):
         self.timer.timeout.connect(self.timer_event)
 
     def start_timer(self):
-        self.timer.setInterval(250)
+        self.timer.setInterval(100)
         self.timer.start()
         self.data_connect.enable()
 
