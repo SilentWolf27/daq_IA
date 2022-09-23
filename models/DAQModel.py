@@ -31,7 +31,7 @@ class DAQModel(metaclass=SingletonType):
         output = pd.DataFrame(self._data, columns=sensor_model.sensors)
         output['Output'] = self._labels
         
-        output.to_csv(filename)
+        output.to_csv(filename, index=False)
 
     @property
     def data(self):
