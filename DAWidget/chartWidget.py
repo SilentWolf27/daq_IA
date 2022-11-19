@@ -27,7 +27,7 @@ class SensorChart(qtch.QChartView):
         chart.setAxisX(x_axis, self.series)
         chart.setAxisY(y_axis, self.series)
 
-    def add_data(self, data: float | int):
+    def add_data(self, data: float):
         self.series.append(self.count, data)
         self.update_y_axis(data)
         
@@ -44,7 +44,7 @@ class SensorChart(qtch.QChartView):
         x_axis.setMax(max + 1)
         x_axis.setMin(min + 1)
 
-    def update_y_axis(self, value: float | int):
+    def update_y_axis(self, value: float):
         y_axis = self.chart().axisY()
         min = y_axis.min()
         max = y_axis.max()

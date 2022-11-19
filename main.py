@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 from DAWidget.DAWidget import DAWidget
 from models.DAQModel import DAQModel
-
+from qt_material import apply_stylesheet
 
 class MainWidget(qtw.QMainWindow):
 
@@ -33,6 +33,7 @@ class MainWidget(qtw.QMainWindow):
 
 if __name__ == '__main__':
     app = qtw.QApplication(sys.argv)
+    apply_stylesheet(app, theme='dark_blue.xml')
     mw = MainWidget()
 
     sys.exit(app.exec())

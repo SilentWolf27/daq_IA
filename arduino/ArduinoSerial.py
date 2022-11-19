@@ -1,6 +1,6 @@
 from serial import Serial, SerialException
 import re
-from serial.tools.list_ports_windows import comports
+from serial.tools.list_ports import comports
 
 class ArduinoSerial():
     def __init__(self, port: str = None, baudrate: int = 9600, timeout: float = 1) -> None:

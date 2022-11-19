@@ -17,7 +17,7 @@ class SensorChartTabs(qtw.QWidget):
         main_layout.addWidget(self.tabs)
         self.setLayout(main_layout)
 
-    def add_data(self, data: List[float | int]):
+    def add_data(self, data: List[float]):
         if not data is None:
             for idx, value in enumerate(data):
                 self.charts[idx].add_data(value)
