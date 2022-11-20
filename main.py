@@ -4,7 +4,7 @@ from PyQt5 import QtCore as qtc
 from DAWidget.DAWidget import DAWidget
 from models.DAQModel import DAQModel
 from qt_material import apply_stylesheet
-
+from models.SensorModel import SensorModel
 class MainWidget(qtw.QMainWindow):
 
     def __init__(self) -> None:

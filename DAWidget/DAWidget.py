@@ -16,8 +16,6 @@ class DAWidget(qtw.QWidget):
 
         # elementos barra lateral
         self.serial_connect = SerialConnectionWidget()
-        self.serial_connect.setSerialEvent(
-            on_connect=self.start_timer, on_disconnect=self.stop_timer)
 
         self.data_connect = DataFileWidget()
         left_layout.addWidget(self.serial_connect)
@@ -25,7 +23,7 @@ class DAWidget(qtw.QWidget):
 
         # Graficas
         sensor_model = SensorModel()
-        self.tab = SensorChartTabs(sensor_model.sensors)
+        self.tab = SensorChartTabs(sensor_model.labels)
 
         # Sensores que se adquiriran los datos
         self.sensor = ArduinoSensor(sensor_model.command, self.serial_connect.serial)
@@ -36,9 +34,10 @@ class DAWidget(qtw.QWidget):
 
         self.timer = qtc.QTimer()
         self.timer.timeout.connect(self.timer_event)
+        self.sensor_model = SensorModel()
 
     def start_timer(self):
-        self.timer.setInterval(100)
+        self.timer.setInterval(1000)
         self.timer.start()
         self.data_connect.enable()
 
@@ -46,6 +45,4 @@ class DAWidget(qtw.QWidget):
         self.timer.stop()
 
     def timer_event(self):
-        data = self.sensor.value
-        self.tab.add_data(data)
-        self.data_connect.add_data(data)
+        self.sensor_model.read_value()

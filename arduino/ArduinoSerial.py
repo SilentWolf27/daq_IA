@@ -33,6 +33,7 @@ class ArduinoSerial():
         return self._serial.write(f"{data}\n".encode('utf-8'))
 
     def test_connection(self) -> bool:
+        return True
         try:
             if not self._serial.is_open:
                 self.open()
@@ -61,4 +62,10 @@ class ArduinoSerial():
 
         return ports
 
-        
+    def toggle_serial_open(self):
+        if self._serial.is_open:
+            self._serial.close()
+            return False
+        else:
+            self._serial.open()
+            return True

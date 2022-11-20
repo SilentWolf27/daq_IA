@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets as qtw
 
 from models.DAQModel import DAQModel
+from models.SensorModel import SensorModel
 
 
 class DataFileWidget(qtw.QWidget):
@@ -40,6 +41,9 @@ class DataFileWidget(qtw.QWidget):
         main = qtw.QVBoxLayout()
         main.addWidget(data_groupbox)
         self.setLayout(main)
+
+        sensor_model = SensorModel()
+        self.data_observer = sensor_model.subscribe_values(self.printData)
 
     def setDataEvent(self, data_start, data_stop):
         try:
@@ -86,3 +90,7 @@ class DataFileWidget(qtw.QWidget):
 
     def enable(self):
         self.start_button.setEnabled(True)
+
+
+    def printData(self, values):
+        print(values)

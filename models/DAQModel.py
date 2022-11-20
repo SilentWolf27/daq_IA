@@ -28,7 +28,7 @@ class DAQModel(metaclass=SingletonType):
 
     def save(self, filename):
         sensor_model = SensorModel()
-        output = pd.DataFrame(self._data, columns=sensor_model.sensors)
+        output = pd.DataFrame(self._data, columns=sensor_model.values)
         output['Output'] = self._labels
         
         output.to_csv(filename, index=False)
