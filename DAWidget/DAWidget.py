@@ -25,9 +25,6 @@ class DAWidget(qtw.QWidget):
         sensor_model = SensorModel()
         self.tab = SensorChartTabs(sensor_model.labels)
 
-        # Sensores que se adquiriran los datos
-        self.sensor = ArduinoSensor(sensor_model.command, self.serial_connect.serial)
-
         main_layout.addItem(left_layout)
         main_layout.addWidget(self.tab)
         self.setLayout(main_layout)

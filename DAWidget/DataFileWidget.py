@@ -90,6 +90,7 @@ class DataFileWidget(qtw.QWidget):
         self.daq_model.append(data, self.label_input.text())
 
     def clear_data(self):
+        self.label_input.setText('')
         self.daq_model.clear()
 
     def enable(self):
