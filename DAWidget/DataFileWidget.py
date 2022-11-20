@@ -7,7 +7,8 @@ from models.SensorModel import SensorModel
 class DataFileWidget(qtw.QWidget):
     def __init__(self) -> None:
         super().__init__()
-        self.daq = DAQModel()
+        self.daq_model = DAQModel()
+        self._data_observer = None
 
         data_layout = qtw.QVBoxLayout()
 
@@ -21,11 +22,11 @@ class DataFileWidget(qtw.QWidget):
         self.start_button = qtw.QPushButton('Iniciar', self)
         self.start_button.setMinimumSize(100, 25)
         self.start_button.setEnabled(False)
-        self.start_button.clicked.connect(self.data_event())
+        self.start_button.clicked.connect(self.data_event)
         data_layout.addWidget(self.start_button)
 
         # Boton borrar los datos
-        self.clear_button = qtw.QPushButton('Borrar datos', self)
+        self.clear_button = qtw.QPushButton('Borrar', self)
         self.clear_button.setMinimumSize(100, 25)
         self.clear_button.setEnabled(False)
         self.clear_button.clicked.connect(self.clear_data)
@@ -42,51 +43,54 @@ class DataFileWidget(qtw.QWidget):
         main.addWidget(data_groupbox)
         self.setLayout(main)
 
+        #Observers
         self.sensor_model = SensorModel()
+        self._serial_connection_observer = self.sensor_model.subscribe_serial_connection(
+            self.on_serial_connect)
+
+        self._save_data_observer = self.daq_model.subscribe_data_saving(
+            self.on_data_saving_change)
+
         
 
-    def setDataEvent(self, data_start, data_stop):
-        try:
-            self.connect_button.clicked.disconnect()
-            self.connect_button.clicked.connect(
-                self.data_event(data_start, data_stop))
-        except:
-            pass
 
-    def data_event(self, data_start=None, data_stop=None):
-        def handle_data():
-            if self.daq.saving:
-                self._stop(data_stop)
-            else:
-                self._start(data_start)
+    def data_event(self):
+        self.daq_model.toggle_save()
 
-        return handle_data
+    def on_serial_connect(self, value):
+        if value:
+            self.enable()
+        else:
+            self.disable()
 
-    def _start(self, callback=None):
+    def on_data_saving_change(self, is_saving):
+        if is_saving:
+            self._start()
+        else:
+            self._stop()
+
+    def _start(self):
         if self.label_input.text() != '':
-            self.daq.saving = True
             self.start_button.setText('Detener')
             self.clear_button.setEnabled(False)
             self.label_input.setStyleSheet("border: 1px solid black")
 
-            if callback:
-                callback()
+            self._data_observer = self.sensor_model.subscribe_values(
+            self.add_data)
         else:
             self.label_input.setStyleSheet("border: 2px solid red")
 
-    def _stop(self, callback=None):
-        self.daq.saving = False
+    def _stop(self):
         self.start_button.setText('Iniciar')
         self.clear_button.setEnabled(True)
-        if callback:
-            callback()
+        if not self._data_observer is None:
+            self._data_observer.dispose()
 
     def add_data(self, data):
-        if self.daq.saving:
-            self.daq.append(data, self.label_input.text())
+        self.daq_model.append(data, self.label_input.text())
 
     def clear_data(self):
-        self.daq.clear()
+        self.daq_model.clear()
 
     def enable(self):
         self.start_button.setEnabled(True)
