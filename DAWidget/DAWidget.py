@@ -35,14 +35,21 @@ class DAWidget(qtw.QWidget):
         self.timer = qtc.QTimer()
         self.timer.timeout.connect(self.timer_event)
         self.sensor_model = SensorModel()
+        self._serial_connection_observer = self.sensor_model.subscribe_serial_connection(
+            self.on_serial_connect)
 
     def start_timer(self):
-        self.timer.setInterval(1000)
+        self.timer.setInterval(250)
         self.timer.start()
-        self.data_connect.enable()
 
     def stop_timer(self):
         self.timer.stop()
 
     def timer_event(self):
         self.sensor_model.read_value()
+
+    def on_serial_connect(self, is_open):
+        if is_open:
+            self.start_timer()
+        else:
+            self.stop_timer()

@@ -2,7 +2,6 @@ from arduino.ArduinoSerial import ArduinoSerial
 from typing import List
 import numpy as np
 
-
 class ArduinoSensor():
     def __init__(self, command: str, serial: ArduinoSerial) -> None:
         self._command = command
@@ -23,14 +22,12 @@ class ArduinoSensor():
         return self._value
 
     def read_value(self) -> List[float]:
-        return np.random.randint(0, 100, size=(6, ))
         try:
             self._serial.writeLine(self._command)
             data = self._serial.readLine().split(' ')
-
             self._value = np.array(data, dtype=np.float16)
             return self._value
-        except:
+        except Exception as e:
             print('Ocurrio un error, revisa la conexión.')
 
     

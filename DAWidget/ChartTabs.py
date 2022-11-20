@@ -18,12 +18,10 @@ class SensorChartTabs(qtw.QWidget):
         self.setLayout(main_layout)
 
         sensor_model = SensorModel()
-        self.data_observer = sensor_model.subscribe_values(self.printData)
+        self.data_observer = sensor_model.subscribe_values(self.add_data)
 
     def add_data(self, data: List[float]):
         if not data is None:
             for idx, value in enumerate(data):
                 self.charts[idx].add_data(value)
 
-    def printData(self, values):
-        print(values)

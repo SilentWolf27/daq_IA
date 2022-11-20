@@ -5,10 +5,15 @@ from DAWidget.DAWidget import DAWidget
 from models.DAQModel import DAQModel
 from qt_material import apply_stylesheet
 from models.SensorModel import SensorModel
+from arduino.ArduinoSerial import ArduinoSerial
 class MainWidget(qtw.QMainWindow):
 
     def __init__(self) -> None:
         super().__init__()
+        
+        serial = ArduinoSerial()
+        self.sensor_model = SensorModel('G', serial)
+
         self.setCentralWidget(DAWidget())
         self.setWindowTitle('Herramienta DAQ')
 

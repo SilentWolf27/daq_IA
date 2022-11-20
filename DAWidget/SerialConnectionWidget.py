@@ -1,7 +1,6 @@
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 from arduino.ArduinoSerial import ArduinoSerial
-import sys
 from models.SensorModel import SensorModel
 
 
@@ -75,6 +74,7 @@ class SerialConnectionWidget(qtw.QWidget):
     def _disconnect(self):
         self.connect_button.setText('Conectar')
         self.port_combo.setEnabled(True)
+        self.port_combo.setCurrentIndex(-1)
         self.update_button.setEnabled(True)
 
     @property

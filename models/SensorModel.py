@@ -5,13 +5,12 @@ from reactivex.subject import Subject, BehaviorSubject
 
 
 class SensorModel(ArduinoSensor, metaclass=SingletonType):
-    def __init__(self, command=None, serial=None) -> None:
-        serial = ArduinoSerial()
+    def __init__(self, command, serial) -> None:
         super().__init__(command, serial)
         self._labels = ["GyroX", "GyroY",
                         "GyroZ", "AccelX", "AccelY", "AccelZ"]
         self.length = len(self._labels)
-        self._command = 'G'
+        self._command = command
 
         # Observables
         self.values_subject = Subject()
@@ -42,9 +41,6 @@ class SensorModel(ArduinoSensor, metaclass=SingletonType):
     def read_value(self):
         data = super().read_value()
         self.values_subject.on_next(data)
-
-    def test_connection(self):
-        return self._serial.test_connection()
 
     def toggle_serial_open(self):
         is_open = self._serial.toggle_serial_open()

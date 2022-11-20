@@ -42,8 +42,8 @@ class DataFileWidget(qtw.QWidget):
         main.addWidget(data_groupbox)
         self.setLayout(main)
 
-        sensor_model = SensorModel()
-        self.data_observer = sensor_model.subscribe_values(self.printData)
+        self.sensor_model = SensorModel()
+        
 
     def setDataEvent(self, data_start, data_stop):
         try:
@@ -91,6 +91,5 @@ class DataFileWidget(qtw.QWidget):
     def enable(self):
         self.start_button.setEnabled(True)
 
-
-    def printData(self, values):
-        print(values)
+    def disable(self):
+        self.start_button.setEnabled(False)
