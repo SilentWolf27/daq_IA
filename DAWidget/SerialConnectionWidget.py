@@ -11,7 +11,7 @@ class SerialConnectionWidget(qtw.QWidget):
 
         # para seleccionar el puerto COM
         self.port_combo = qtw.QComboBox(self)
-        self.port_combo.setMinimumSize(100, 25)
+        self.port_combo.setMinimumSize(150, 25)
         self.port_combo.currentTextChanged.connect(self._change_port)
         connection_layout.addWidget(self.port_combo)
         self.model = qtc.QStringListModel([])
@@ -19,18 +19,18 @@ class SerialConnectionWidget(qtw.QWidget):
 
         # Boton para conectarse al puerto serie
         self.connect_button = qtw.QPushButton('Conectar', self)
-        self.connect_button.setMinimumSize(100, 25)
+        self.connect_button.setMinimumSize(150, 25)
         self.connect_button.clicked.connect(self.toggle_connect)
         connection_layout.addWidget(self.connect_button)
 
         # Boton para actualizar la lista de puertos series
         self.update_button = qtw.QPushButton('Actualizar', self)
-        self.update_button.setMinimumSize(100, 25)
+        self.update_button.setMinimumSize(150, 25)
         self.update_button.clicked.connect(self._refresh_ports)
         connection_layout.addWidget(self.update_button)
 
         connect_groupbox = qtw.QGroupBox('Conectar Puerto', self)
-        connect_groupbox.setMinimumSize(100, 25)
+        connect_groupbox.setMinimumSize(150, 25)
         connect_groupbox.setMaximumWidth(200)
         connect_groupbox.setSizePolicy(
             qtw.QSizePolicy.Maximum, qtw.QSizePolicy.Fixed)

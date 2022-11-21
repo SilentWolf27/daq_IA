@@ -82,3 +82,9 @@ class ArduinoSerial():
             return self.safe_close() 
         else:
             return self.safe_open() 
+
+    def close(self):
+        self._serial.close()
+
+class ArduinoConnectionException(Exception):
+    pass

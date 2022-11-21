@@ -2,10 +2,10 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 from DAWidget.DataFileWidget import DataFileWidget
 from DAWidget.SerialConnectionWidget import SerialConnectionWidget
-from arduino.ArduinoSensor import ArduinoSensor
 from DAWidget.ChartTabs import SensorChartTabs
 from models.SensorModel import SensorModel
-
+from models.StatusModel import StatusModel
+from arduino.ArduinoSerial import ArduinoConnectionException
 
 class DAWidget(qtw.QWidget):
     def __init__(self) -> None:
@@ -31,9 +31,12 @@ class DAWidget(qtw.QWidget):
 
         self.timer = qtc.QTimer()
         self.timer.timeout.connect(self.timer_event)
+
+        self.status_model = StatusModel()
         self.sensor_model = SensorModel()
         self._serial_connection_observer = self.sensor_model.subscribe_serial_connection(
             self.on_serial_connect)
+        
 
     def start_timer(self):
         self.timer.setInterval(250)
@@ -43,10 +46,15 @@ class DAWidget(qtw.QWidget):
         self.timer.stop()
 
     def timer_event(self):
-        self.sensor_model.read_value()
+        try:
+            self.sensor_model.read_value()
+        except ArduinoConnectionException:
+            self.sensor_model.close()
 
     def on_serial_connect(self, is_open):
         if is_open:
+            self.status_model.port_status = f"Puerto serie conectado a: {self.sensor_model.port}"
             self.start_timer()
         else:
+            self.status_model.port_status = "Puerto serie desconectado"
             self.stop_timer()

@@ -45,3 +45,8 @@ class SensorModel(ArduinoSensor, metaclass=SingletonType):
     def toggle_serial_open(self):
         is_open = self._serial.toggle_serial_open()
         self._is_open.on_next(is_open)
+
+    def close(self):
+        self._serial.close()
+        self.is_open = False
+        self._is_open.on_next(self.is_open)

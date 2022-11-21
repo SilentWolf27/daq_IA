@@ -1,4 +1,4 @@
-from arduino.ArduinoSerial import ArduinoSerial
+from arduino.ArduinoSerial import ArduinoSerial, ArduinoConnectionException
 from typing import List
 import numpy as np
 
@@ -27,7 +27,6 @@ class ArduinoSensor():
             data = self._serial.readLine().split(' ')
             self._value = np.array(data, dtype=np.float16)
             return self._value
-        except Exception as e:
-            print('Ocurrio un error, revisa la conexión.')
-
+        except:
+            raise ArduinoConnectionException('Conexion perdida')
     

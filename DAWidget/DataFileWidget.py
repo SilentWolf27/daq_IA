@@ -15,25 +15,25 @@ class DataFileWidget(qtw.QWidget):
         # Para el nombre de la etiqueta de salida
         self.label_input = qtw.QLineEdit()
         self.label_input.setPlaceholderText('Etiqueta de salida')
-        self.label_input.setMinimumSize(100, 25)
+        self.label_input.setMinimumSize(150, 25)
         data_layout.addWidget(self.label_input)
 
         # Boton iniciar o detener la adquisicion
         self.start_button = qtw.QPushButton('Iniciar', self)
-        self.start_button.setMinimumSize(100, 25)
+        self.start_button.setMinimumSize(150, 25)
         self.start_button.setEnabled(False)
         self.start_button.clicked.connect(self.data_event)
         data_layout.addWidget(self.start_button)
 
         # Boton borrar los datos
         self.clear_button = qtw.QPushButton('Borrar', self)
-        self.clear_button.setMinimumSize(100, 25)
+        self.clear_button.setMinimumSize(150, 25)
         self.clear_button.setEnabled(False)
         self.clear_button.clicked.connect(self.clear_data)
         data_layout.addWidget(self.clear_button)
 
         data_groupbox = qtw.QGroupBox('Adquisición de datos', self)
-        data_groupbox.setMinimumSize(100, 25)
+        data_groupbox.setMinimumSize(150, 25)
         data_groupbox.setMaximumWidth(200)
         data_groupbox.setSizePolicy(
             qtw.QSizePolicy.Maximum, qtw.QSizePolicy.Fixed)
