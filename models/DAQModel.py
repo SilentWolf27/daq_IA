@@ -25,7 +25,7 @@ class DAQModel(metaclass=SingletonType):
 
     def clear(self):
         model = SensorModel()
-        self._data = np.empty((1, model.length))
+        self._data = np.empty((0, model.length))
         self._labels = np.array([])
 
     def save(self, filename):
@@ -53,3 +53,8 @@ class DAQModel(metaclass=SingletonType):
     def toggle_save(self):
         self.is_saving = not self.is_saving
         self._is_saving_subject.on_next(self.is_saving)
+
+    @property
+    def length(self):
+        h, _ = self.data.shape
+        return h

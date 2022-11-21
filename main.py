@@ -22,12 +22,13 @@ class MainWidget(qtw.QMainWindow):
 
         save_icon = self.style().standardIcon(qtw.QStyle.SP_DialogSaveButton)
         toolbar = self.addToolBar('Archivo')
-        toolbar.addAction(save_icon, 'Guardar', self.saveFile)
+        toolbar.addAction(save_icon, 'Exportar', self.saveFile)
         toolbar.setMovable(False)
         toolbar.setFloatable(False)
 
         statusbar = qtw.QStatusBar()
         status_widget = StatusWidget()
+        status_widget.setMinimumWidth(1000)
         status_widget.setSizePolicy(
             qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
         statusbar.addWidget(status_widget)

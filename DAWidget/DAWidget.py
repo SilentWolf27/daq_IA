@@ -49,6 +49,7 @@ class DAWidget(qtw.QWidget):
         try:
             self.sensor_model.read_value()
         except ArduinoConnectionException:
+            self.status_model.error = 'Conexión perdida'
             self.sensor_model.close()
 
     def on_serial_connect(self, is_open):

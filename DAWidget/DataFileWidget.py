@@ -2,7 +2,8 @@ from PyQt5 import QtWidgets as qtw
 
 from models.DAQModel import DAQModel
 from models.SensorModel import SensorModel
-
+from models.StatusModel import StatusModel
+from models.SensorModel import SensorModel
 
 class DataFileWidget(qtw.QWidget):
     def __init__(self) -> None:
@@ -43,7 +44,7 @@ class DataFileWidget(qtw.QWidget):
         main.addWidget(data_groupbox)
         self.setLayout(main)
 
-        #Observers
+        # Observers
         self.sensor_model = SensorModel()
         self._serial_connection_observer = self.sensor_model.subscribe_serial_connection(
             self.on_serial_connect)
@@ -51,7 +52,7 @@ class DataFileWidget(qtw.QWidget):
         self._save_data_observer = self.daq_model.subscribe_data_saving(
             self.on_data_saving_change)
 
-        
+        self.status_model = StatusModel()
 
 
     def data_event(self):
@@ -61,6 +62,7 @@ class DataFileWidget(qtw.QWidget):
         if value:
             self.enable()
         else:
+            self._stop()
             self.disable()
 
     def on_data_saving_change(self, is_saving):
@@ -76,7 +78,8 @@ class DataFileWidget(qtw.QWidget):
             self.label_input.setStyleSheet("border: 1px solid black")
 
             self._data_observer = self.sensor_model.subscribe_values(
-            self.add_data)
+                self.add_data)
+            self.status_model.data_status = 'Adquisición de datos en curso'
         else:
             self.label_input.setStyleSheet("border: 2px solid red")
 
@@ -85,6 +88,7 @@ class DataFileWidget(qtw.QWidget):
         self.clear_button.setEnabled(True)
         if not self._data_observer is None:
             self._data_observer.dispose()
+            self.status_model.data_status = f"Adquisición de datos detenida: {self.daq_model.length} datos guardados"
 
     def add_data(self, data):
         self.daq_model.append(data, self.label_input.text())
@@ -92,6 +96,8 @@ class DataFileWidget(qtw.QWidget):
     def clear_data(self):
         self.label_input.setText('')
         self.daq_model.clear()
+        if not self._data_observer is None:
+            self.status_model.data_status = f"Adquisición de datos detenida: {self.daq_model.length} datos guardados"
 
     def enable(self):
         self.start_button.setEnabled(True)
