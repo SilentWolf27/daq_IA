@@ -29,7 +29,7 @@ class ArduinoSerial():
 
     @property
     def is_open(self) -> bool:
-        return self._is_open
+        return self.serial.is_open
 
     def safe_open(self) -> bool:
         try:
@@ -43,7 +43,7 @@ class ArduinoSerial():
                 self._is_open = True
                 return True
             else:
-                self.is_open = False
+                self._is_open = False
                 return self._is_open
         except:
             self._is_open = False
@@ -84,6 +84,7 @@ class ArduinoSerial():
             return self.safe_open() 
 
     def close(self):
+        self._is_open = False
         self._serial.close()
 
 class ArduinoConnectionException(Exception):
