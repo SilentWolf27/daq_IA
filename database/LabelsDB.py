@@ -7,6 +7,7 @@ from PyQt5 import QtCore as qtc
 class LabelsDB(DB):
     def __init__(self) -> None:
         super().__init__()
+        self.init_tables()
         self.db.open()
         self.model = qts.QSqlTableModel(None, self.db)
         self.model.setTable('labels')
@@ -21,3 +22,11 @@ class LabelsDB(DB):
             labels.append(query.value('name'))
 
         return labels
+
+    def init_tables(self):
+        tables = self.db.tables()
+        if not 'labels' in tables:
+            print('tables')
+            self.db.exec("""CREATE TABLE labels (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(255) NOT NULL);
+            """)
+

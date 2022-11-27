@@ -1,3 +1,4 @@
+autopep8==1.7.0
 Jinja2==3.1.2
 MarkupSafe==2.1.1
 numpy==1.23.3
@@ -12,5 +13,7 @@ pyserial==3.5
 python-dateutil==2.8.2
 pytz==2022.2.1
 qt-material==2.12
+reactivex==4.0.4
 six==1.16.0
 toml==0.10.2
+typing_extensions==4.4.0
