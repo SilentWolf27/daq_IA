@@ -15,8 +15,10 @@ class MainWidget(qtw.QMainWindow):
     def __init__(self) -> None:
         super().__init__()
 
+        self.settings = qtc.QSettings('IMT_UASLP', 'IA_DAQ')
         serial = ArduinoSerial()
-        self.sensor_model = SensorModel('G', serial)
+        self.sensor_model = SensorModel(self.settings.value(
+            'sensor/command', 'G', type=str), serial)
         self.serial_sub = self.sensor_model.subscribe_serial_connection(
             self.handle_serial)
 
@@ -71,6 +73,8 @@ class MainWidget(qtw.QMainWindow):
         config_widget.exec()
         sensor_model = SensorModel()
         sensor_model.emit_labels()
+        self.sensor_model.command = self.settings.value(
+            'sensor/command', 'G', type=str)
 
     def handle_serial(self, value):
         self.menuBar().setEnabled(not value)

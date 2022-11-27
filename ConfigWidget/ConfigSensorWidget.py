@@ -1,14 +1,25 @@
 from PyQt5 import QtWidgets as qtw
 from models.SensorModel import SensorModel
+from PyQt5 import QtCore as qtc
 
 
 class ConfigSensorWidget(qtw.QDialog):
 
     def __init__(self) -> None:
         super().__init__()
-
+        self.settings = qtc.QSettings('IMT_UASLP', 'IA_DAQ')
         main_layout = qtw.QVBoxLayout()
 
+        command_layout = qtw.QHBoxLayout()
+        command_layout.addWidget(qtw.QLabel('Comando de lectura:'))
+        self.command_input = qtw.QLineEdit(editingFinished=self.save_command)
+        self.command_input.setText(
+            self.settings.value('sensor/command', 'G', type=str))
+        command_layout.setContentsMargins(0, 10, 0, 20)
+        command_layout.addWidget(self.command_input)
+        main_layout.addLayout(command_layout)
+
+        main_layout.addWidget(qtw.QLabel('Valores del sensor'))
         self.sensor = SensorModel()
         self.label_list = qtw.QTableView()
         self.label_list.setModel(self.sensor.labels_model)
@@ -36,3 +47,6 @@ class ConfigSensorWidget(qtw.QDialog):
 
         for index in selected:
             self.sensor.remove_label(index.row())
+
+    def save_command(self):
+        self.settings.setValue('sensor/command', self.command_input.text())

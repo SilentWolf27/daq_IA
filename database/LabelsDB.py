@@ -20,5 +20,4 @@ class LabelsDB(DB):
         while query.next():
             labels.append(query.value('name'))
 
-        print(labels)
         return labels

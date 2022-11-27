@@ -28,10 +28,6 @@ class SensorModel(ArduinoSensor, metaclass=SingletonType):
         return self._labels_db.model
 
     @property
-    def command(self):
-        return self._command
-
-    @property
     def port(self) -> str:
         return self._serial.port
 
