@@ -22,8 +22,7 @@ class DAWidget(qtw.QWidget):
         left_layout.addWidget(self.data_connect)
 
         # Graficas
-        sensor_model = SensorModel()
-        self.tab = SensorChartTabs(sensor_model.labels)
+        self.tab = SensorChartTabs()
 
         main_layout.addItem(left_layout)
         main_layout.addWidget(self.tab)

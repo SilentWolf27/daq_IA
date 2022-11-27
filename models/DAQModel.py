@@ -44,7 +44,7 @@ class DAQModel(metaclass=SingletonType):
 
     @property
     def saving(self):
-        return self._saving
+        return self.is_saving
 
     @saving.setter
     def saving(self, value: bool):

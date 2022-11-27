@@ -7,6 +7,7 @@ from qt_material import apply_stylesheet
 from models.SensorModel import SensorModel
 from arduino.ArduinoSerial import ArduinoSerial
 from DAWidget.StatusWidget import StatusWidget
+from ConfigWidget.ConfigSensorWidget import ConfigSensorWidget
 
 
 class MainWidget(qtw.QMainWindow):
@@ -16,9 +17,13 @@ class MainWidget(qtw.QMainWindow):
 
         serial = ArduinoSerial()
         self.sensor_model = SensorModel('G', serial)
+        self.serial_sub = self.sensor_model.subscribe_serial_connection(
+            self.handle_serial)
 
         self.setCentralWidget(DAWidget())
         self.setWindowTitle('Herramienta DAQ')
+
+        self.create_menu()
 
         save_icon = self.style().standardIcon(qtw.QStyle.SP_DialogSaveButton)
         toolbar = self.addToolBar('Archivo')
@@ -38,6 +43,18 @@ class MainWidget(qtw.QMainWindow):
         self.setMinimumSize(1000, 500)
         self.show()
 
+    def create_menu(self):
+        menu = qtw.QMenuBar(self)
+        self.setMenuBar(menu)
+
+        file_menu = qtw.QMenu('Archivo', self)
+        file_menu.addAction('Exportar datos', self.saveFile)
+        menu.addMenu(file_menu)
+
+        edit_menu = qtw.QMenu('Configuración', self)
+        edit_menu.addAction('Configurar sensor', self.configSensor)
+        menu.addMenu(edit_menu)
+
     def saveFile(self):
         model = DAQModel()
         if not model.saving:
@@ -48,6 +65,15 @@ class MainWidget(qtw.QMainWindow):
             if filename:
                 extension = '' if filename.endswith('.csv') else '.csv'
                 model.save(filename + extension)
+
+    def configSensor(self):
+        config_widget = ConfigSensorWidget()
+        config_widget.exec()
+        sensor_model = SensorModel()
+        sensor_model.emit_labels()
+
+    def handle_serial(self, value):
+        self.menuBar().setEnabled(not value)
 
 
 if __name__ == '__main__':
